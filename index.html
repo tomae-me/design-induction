@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figma Design Induction</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-50: #EEEDFE;
+    --purple-100: #CECBF6;
+    --purple-200: #AFA9EC;
+    --purple-400: #7F77DD;
+    --purple-600: #534AB7;
+    --purple-800: #3C3489;
+    --purple-900: #26215C;
+    --teal-50: #E1F5EE;
+    --teal-100: #9FE1CB;
+    --teal-400: #1D9E75;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --amber-50: #FAEEDA;
+    --amber-400: #BA7517;
+    --amber-800: #633806;
+    --coral-50: #FAECE7;
+    --coral-400: #D85A30;
+    --coral-800: #712B13;
+    --bg: #0E0E12;
+    --bg-card: #16161C;
+    --bg-sidebar: #111117;
+    --bg-hover: #1E1E28;
+    --border: rgba(255,255,255,0.07);
+    --border-accent: rgba(127,119,221,0.4);
+    --text-primary: #F0EFF8;
+    --text-secondary: #8B89A8;
+    --text-muted: #5A5876;
+    --accent: #7F77DD;
+    --accent-light: #AFA9EC;
+    --success: #1D9E75;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text-primary); font-family: var(--font); font-size: 15px; line-height: 1.6; overflow: hidden; }
+
+  /* === LAYOUT === */
+  .app { display: flex; height: 100vh; }
+  .sidebar { width: 260px; flex-shrink: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* === SIDEBAR HEADER === */
+  .sidebar-top { padding: 24px 20px 16px; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .logo-mark { width: 32px; height: 32px; background: var(--purple-400); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .logo-mark svg { width: 18px; height: 18px; fill: white; }
+  .logo-text { font-size: 14px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.02em; }
+  .logo-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .overall-progress { }
+  .op-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+  .op-pct { color: var(--accent-light); font-weight: 500; }
+  .progress-track { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--purple-400), var(--teal-400)); border-radius: 2px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* === CHAPTER LIST === */
+  .chapter-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .chapter-list::-webkit-scrollbar { width: 4px; }
+  .chapter-list::-webkit-scrollbar-track { background: transparent; }
+  .chapter-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+  .ch-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 20px; border: none; background: none; cursor: pointer; text-align: left; color: var(--text-secondary); font-family: var(--font); font-size: 13px; transition: all 0.15s; border-left: 2px solid transparent; }
+  .ch-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .ch-btn.active { background: rgba(127,119,221,0.1); color: var(--text-primary); border-left-color: var(--accent); }
+  .ch-btn.done { color: var(--text-secondary); }
+  .ch-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; flex-shrink: 0; font-family: var(--mono); transition: all 0.2s; color: var(--text-muted); }
+  .ch-btn.active .ch-num { background: var(--purple-400); border-color: var(--purple-400); color: white; }
+  .ch-btn.done .ch-num { background: rgba(29,158,117,0.2); border-color: var(--success); color: var(--success); font-size: 12px; }
+  .ch-name { flex: 1; line-height: 1.3; }
+  .ch-time { font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
+
+  /* === SIDEBAR FOOTER === */
+  .sidebar-footer { padding: 14px 20px; border-top: 1px solid var(--border); }
+  .reset-btn { width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.08); background: none; color: var(--text-muted); font-family: var(--font); font-size: 12px; border-radius: var(--radius); cursor: pointer; transition: all 0.15s; }
+  .reset-btn:hover { border-color: rgba(255,100,100,0.3); color: #FF6B6B; background: rgba(255,100,100,0.05); }
+
+  /* === TOP BAR === */
+  .topbar { padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .topbar-chapter { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .topbar-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: var(--text-primary); margin-top: 2px; }
+  .topbar-meta { display: flex; gap: 8px; align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .badge-time { background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
+  .badge-level-beginner { background: rgba(29,158,117,0.15); color: #5DCAA5; border: 1px solid rgba(29,158,117,0.3); }
+  .badge-level-intermediate { background: rgba(127,119,221,0.15); color: var(--accent-light); border: 1px solid rgba(127,119,221,0.3); }
+  .badge-level-advanced { background: rgba(216,90,48,0.15); color: #F0997B; border: 1px solid rgba(216,90,48,0.3); }
+
+  /* === CONTENT AREA === */
+  .content { flex: 1; overflow-y: auto; padding: 32px; }
+  .content::-webkit-scrollbar { width: 6px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+  .chapter-view { display: none; animation: fadeIn 0.25s ease; }
+  .chapter-view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* === CONTENT SECTIONS === */
+  .section { margin-bottom: 28px; }
+  .section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+
+  .concept-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 8px; transition: border-color 0.15s; }
+  .concept-card:hover { border-color: rgba(255,255,255,0.12); }
+  .concept-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .concept-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  .task-card { background: rgba(127,119,221,0.07); border: 1px solid rgba(127,119,221,0.25); border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 8px; }
+  .task-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .task-icon { font-size: 18px; }
+  .task-label-text { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple-200); }
+  .task-title { font-size: 15px; font-weight: 600; color: var(--purple-50); margin-bottom: 12px; }
+  .task-steps { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .task-step { display: flex; gap: 10px; align-items: flex-start; }
+  .step-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(127,119,221,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.15s; margin-top: 2px; }
+  .step-check:hover { border-color: var(--accent); background: rgba(127,119,221,0.1); }
+  .step-check.checked { background: var(--purple-400); border-color: var(--purple-400); }
+  .step-check.checked::after { content: ''; display: block; width: 5px; height: 8px; border: 1.5px solid white; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }
+  .step-text { font-size: 13px; color: var(--purple-100); line-height: 1.6; flex: 1; transition: color 0.15s; }
+  .step-text.checked { color: var(--text-muted); text-decoration: line-through; }
+
+  .tip-card { background: rgba(29,158,117,0.07); border: 1px solid rgba(29,158,117,0.25); border-radius: var(--radius-lg); padding: 14px 18px; }
+  .tip-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-400); margin-bottom: 5px; }
+  .tip-text { font-size: 13px; color: var(--teal-100); line-height: 1.6; }
+
+  /* === FIGMA PAGE BANNER === */
+  .figma-banner { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 11px 16px; margin-bottom: 28px; }
+  .figma-banner-icon { width: 28px; height: 28px; background: #1e1e1e; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .figma-banner-icon svg { width: 16px; height: 16px; }
+  .figma-banner-text { flex: 1; font-size: 13px; color: var(--text-secondary); }
+  .figma-banner-text strong { color: var(--text-primary); font-weight: 500; }
+  .figma-banner-page { font-family: var(--mono); font-size: 11px; color: var(--accent-light); background: rgba(127,119,221,0.12); border: 1px solid rgba(127,119,221,0.25); padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .sample-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 8px; }
+  .sample-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .sample-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .sample-inner { background: #1A1A24; border-radius: 8px; padding: 24px; display: flex; align-items: center; justify-content: center; min-height: 160px; }
+
+  /* figma-style UI components inside samples */
+  .s-color-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .s-swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .s-swatch-dot { border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+  .s-swatch-name { font-size: 10px; color: #6B6990; font-family: var(--mono); text-align: center; }
+  .s-swatch-hex { font-size: 9px; color: #4A4868; font-family: var(--mono); }
+
+  .s-type-stack { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .s-h1 { font-size: 28px; font-weight: 700; color: #F0EFF8; letter-spacing: -0.02em; line-height: 1.1; font-family: var(--font); }
+  .s-title { font-size: 16px; font-weight: 500; color: #C8C7E0; font-family: var(--font); }
+  .s-body { font-size: 12px; color: #8B89A8; line-height: 1.6; font-family: var(--font); }
+  .s-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 4px 0; }
+  .s-type-meta { font-size: 9px; color: #4A4868; font-family: var(--mono); }
+
+  .s-btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .s-btn { padding: 9px 18px; border-radius: 8px; font-family: var(--font); font-size: 13px; font-weight: 500; cursor: default; border: none; }
+  .s-btn-primary { background: #7F77DD; color: white; }
+  .s-btn-secondary { background: transparent; color: #AFA9EC; border: 1px solid rgba(127,119,221,0.5) !important; }
+  .s-btn-disabled { background: rgba(255,255,255,0.05); color: #4A4868; }
+  .s-btn-ghost { background: transparent; color: #8B89A8; }
+
+  .s-input-stack { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
+  .s-field { display: flex; flex-direction: column; gap: 4px; }
+  .s-label { font-size: 10px; font-weight: 500; color: #8B89A8; font-family: var(--font); }
+  .s-input { padding: 8px 12px; border-radius: 7px; font-family: var(--font); font-size: 12px; background: #0E0E12; border: 1px solid; }
+  .s-input-default { border-color: rgba(255,255,255,0.12); color: #4A4868; }
+  .s-input-focused { border-color: #7F77DD; color: #F0EFF8; box-shadow: 0 0 0 3px rgba(127,119,221,0.15); }
+  .s-input-error { border-color: rgba(226,75,74,0.6); color: #F0EFF8; }
+  .s-error-msg { font-size: 10px; color: #E24B4A; font-family: var(--font); }
+  .s-select { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 7px; background: #0E0E12; border: 1px solid rgba(255,255,255,0.12); font-family: var(--font); font-size: 12px; color: #4A4868; }
+  .s-chevron { width: 12px; height: 12px; border-right: 1.5px solid #4A4868; border-bottom: 1.5px solid #4A4868; transform: rotate(45deg) translateY(-3px); display: inline-block; }
+
+  .s-tag-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .s-tag { padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 500; font-family: var(--font); display: flex; align-items: center; gap: 5px; border: 1px solid; }
+  .s-tag-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .s-tag-default { background: rgba(255,255,255,0.05); color: #8B89A8; border-color: rgba(255,255,255,0.1); }
+  .s-tag-dot-default { background: #8B89A8; }
+  .s-tag-success { background: rgba(29,158,117,0.15); color: #5DCAA5; border-color: rgba(29,158,117,0.3); }
+  .s-tag-dot-success { background: #1D9E75; }
+  .s-tag-warning { background: rgba(186,117,23,0.15); color: #F0C060; border-color: rgba(186,117,23,0.3); }
+  .s-tag-dot-warning { background: #BA7517; }
+  .s-tag-error { background: rgba(226,75,74,0.15); color: #F09595; border-color: rgba(226,75,74,0.3); }
+  .s-tag-dot-error { background: #E24B4A; }
+
+  .s-icon-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .s-icon-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .s-icon-box { width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; }
+  .s-icon-box svg { width: 20px; height: 20px; stroke: #8B89A8; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .s-icon-name { font-size: 9px; color: #4A4868; font-family: var(--mono); }
+
+  .s-thumb-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .s-thumb { border-radius: 8px; background: #0E0E12; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
+  .s-thumb-label { font-size: 9px; color: #4A4868; font-family: var(--mono); }
+  .s-thumb svg { width: 20px; height: 20px; stroke: #2E2E3E; fill: none; stroke-width: 1.5; }
+
+  .s-card { background: #0E0E12; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; width: 220px; }
+  .s-card-img { width: 100%; height: 110px; background: #1A1A24; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; }
+  .s-card-img svg { width: 28px; height: 28px; stroke: #2E2E3E; fill: none; stroke-width: 1.5; }
+  .s-card-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .s-card-title { font-size: 14px; font-weight: 600; color: #F0EFF8; font-family: var(--font); }
+  .s-card-desc { font-size: 11px; color: #8B89A8; font-family: var(--font); line-height: 1.5; }
+
+  .s-form { background: #0E0E12; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; width: 240px; display: flex; flex-direction: column; gap: 12px; }
+  .s-form-title { font-size: 16px; font-weight: 600; color: #F0EFF8; font-family: var(--font); }
+  .s-form-sub { font-size: 11px; color: #8B89A8; font-family: var(--font); }
+
+  .s-list { background: #0E0E12; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; width: 260px; }
+  .s-list-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .s-list-item:last-child { border-bottom: none; }
+  .s-list-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .s-list-icon svg { width: 16px; height: 16px; stroke: #7F77DD; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .s-list-text { font-size: 12px; color: #C8C7E0; font-family: var(--font); }
+
+  .s-complex { background: #0E0E12; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; width: 240px; }
+  .s-complex-img { width: 100%; height: 100px; background: #1A1A24; position: relative; display: flex; align-items: center; justify-content: center; }
+  .s-complex-tag { position: absolute; top: 8px; left: 8px; padding: 3px 8px; border-radius: 100px; background: rgba(127,119,221,0.25); color: #AFA9EC; font-size: 10px; font-weight: 500; font-family: var(--font); border: 1px solid rgba(127,119,221,0.4); }
+  .s-complex-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .s-toggle-row { display: flex; align-items: center; justify-content: space-between; }
+  .s-toggle-label { font-size: 10px; color: #4A4868; font-family: var(--mono); }
+  .s-toggle { width: 28px; height: 16px; border-radius: 8px; background: rgba(127,119,221,0.3); position: relative; border: 1px solid rgba(127,119,221,0.4); }
+  .s-toggle.on { background: #7F77DD; }
+  .s-toggle::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: left 0.15s; }
+  .s-toggle.on::after { left: 15px; }
+  .s-toggles { display: flex; flex-direction: column; gap: 6px; padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+  /* === COMPLETE BUTTON === */
+  .complete-row { margin-top: 28px; display: flex; align-items: center; gap: 16px; }
+  .complete-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--purple-400); color: white; border: none; border-radius: var(--radius); font-family: var(--font); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .complete-btn:hover { background: var(--purple-600); transform: translateY(-1px); }
+  .complete-btn.completed { background: rgba(29,158,117,0.2); color: var(--teal-400); border: 1px solid rgba(29,158,117,0.3); cursor: default; transform: none; }
+  .complete-hint { font-size: 12px; color: var(--text-muted); }
+
+  /* === BOTTOM NAV === */
+  .bottom-nav { padding: 16px 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+  .nav-btn { display: flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1px solid var(--border); background: none; color: var(--text-secondary); font-family: var(--font); font-size: 13px; border-radius: var(--radius); cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); border-color: rgba(255,255,255,0.12); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-btn.next { background: var(--bg-card); color: var(--text-primary); border-color: rgba(255,255,255,0.1); }
+  .nav-btn.next:hover { background: rgba(127,119,221,0.15); border-color: var(--accent); color: var(--accent-light); }
+  .nav-pos { font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
+
+  /* === WELCOME SCREEN === */
+  .welcome { text-align: center; padding: 60px 32px; }
+  .welcome-emoji { font-size: 48px; margin-bottom: 20px; }
+  .welcome-title { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 8px; }
+  .welcome-sub { font-size: 15px; color: var(--text-secondary); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+  .welcome-stats { display: flex; gap: 24px; justify-content: center; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 300; color: var(--accent-light); font-family: var(--mono); }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .start-btn { margin-top: 32px; display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; background: var(--purple-400); color: white; border: none; border-radius: var(--radius); font-family: var(--font); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .start-btn:hover { background: var(--purple-600); transform: translateY(-2px); }
+
+  /* === COMPLETION SCREEN === */
+  .completion { text-align: center; padding: 60px 32px; display: none; }
+  .completion.active { display: block; }
+  .confetti { font-size: 48px; margin-bottom: 20px; }
+  .completion-title { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 8px; }
+  .completion-sub { font-size: 15px; color: var(--text-secondary); max-width: 480px; margin: 0 auto; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5.5A3.5 3.5 0 018.5 2H12v7H8.5A3.5 3.5 0 015 5.5zM12 2h3.5a3.5 3.5 0 110 7H12V2zM12 12.5v-3.5h3.5a3.5 3.5 0 110 7H12v-3.5zM5 12.5A3.5 3.5 0 018.5 9H12v7H8.5A3.5 3.5 0 015 12.5zM8.5 16H12v3.5a3.5 3.5 0 11-3.5-3.5z"/></svg>
+        </div>
+        <div>
+          <div class="logo-text">Figma Induction</div>
+          <div class="logo-sub">Design System Training</div>
+        </div>
+      </div>
+      <div class="overall-progress">
+        <div class="op-label"><span>Overall progress</span><span class="op-pct" id="pct-label">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="overall-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="chapter-list" id="chapter-list">
+      <!-- injected by JS -->
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="reset-btn" onclick="resetProgress()">↺ Reset all progress</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar" id="topbar">
+      <div>
+        <div class="topbar-chapter" id="tb-chapter">Welcome</div>
+        <div class="topbar-title" id="tb-title">Figma Design Induction</div>
+      </div>
+      <div class="topbar-meta" id="tb-meta"></div>
+    </div>
+
+    <div class="content" id="content-area">
+      <!-- chapters injected by JS -->
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)" disabled>← Previous</button>
+      <span class="nav-pos" id="nav-pos">— / 11</span>
+      <button class="nav-btn next" id="next-btn" onclick="navigate(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'figma-induction-v1';
+
+const samples = {
+  0: `<div class="s-color-row">
+    <div class="s-swatch"><div class="s-swatch-dot" style="width:56px;height:56px;background:#F8F7FF;"></div><div class="s-swatch-name">background<br>/default</div><div class="s-swatch-hex">#F8F7FF</div></div>
+    <div class="s-swatch"><div class="s-swatch-dot" style="width:56px;height:56px;background:#1A1928;"></div><div class="s-swatch-name">text<br>/primary</div><div class="s-swatch-hex">#1A1928</div></div>
+    <div class="s-swatch"><div class="s-swatch-dot" style="width:56px;height:56px;background:#D4D2E8;"></div><div class="s-swatch-name">border<br>/default</div><div class="s-swatch-hex">#D4D2E8</div></div>
+    <div class="s-swatch"><div class="s-swatch-dot" style="width:56px;height:56px;background:#7F77DD;"></div><div class="s-swatch-name">primary<br>/action</div><div class="s-swatch-hex">#7F77DD</div></div>
+  </div>`,
+
+  1: `<div class="s-type-stack" style="max-width:340px;">
+    <div><div class="s-type-meta">heading/h1 · 32px · Bold · 1.2</div><div class="s-h1">The quick brown fox</div></div>
+    <div class="s-divider"></div>
+    <div><div class="s-type-meta">title/default · 18px · Medium · 1.4</div><div class="s-title">Jumps over the lazy dog</div></div>
+    <div class="s-divider"></div>
+    <div><div class="s-type-meta">body/default · 14px · Regular · 1.6</div><div class="s-body">Great design begins with a clear typographic scale. Each level guides the reader's eye through the content with purpose and clarity.</div></div>
+  </div>`,
+
+  2: `<div class="s-btn-row">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div class="s-type-meta">Primary</div>
+      <div class="s-btn s-btn-primary">Get started</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div class="s-type-meta">Secondary</div>
+      <div class="s-btn s-btn-secondary">Learn more</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div class="s-type-meta">Ghost</div>
+      <div class="s-btn s-btn-ghost">Cancel</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div class="s-type-meta">Disabled</div>
+      <div class="s-btn s-btn-disabled">Submit</div>
+    </div>
+  </div>`,
+
+  3: `<div class="s-input-stack">
+    <div class="s-field"><div class="s-label">DEFAULT STATE</div><div class="s-input s-input-default">Placeholder text</div></div>
+    <div class="s-field"><div class="s-label">FOCUSED STATE</div><div class="s-input s-input-focused">user@example.com</div></div>
+    <div class="s-field"><div class="s-label">ERROR STATE</div><div class="s-input s-input-error">invalid-email</div><div class="s-error-msg">Please enter a valid email address</div></div>
+    <div class="s-field"><div class="s-label">SELECT / DROPDOWN</div><div class="s-select"><span>Choose an option</span><span class="s-chevron"></span></div></div>
+  </div>`,
+
+  4: `<div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
+    <div class="s-type-meta" style="color:#4A4868;">Status variants</div>
+    <div class="s-tag-row">
+      <div class="s-tag s-tag-default"><div class="s-tag-dot s-tag-dot-default"></div>Default</div>
+      <div class="s-tag s-tag-success"><div class="s-tag-dot s-tag-dot-success"></div>Active</div>
+      <div class="s-tag s-tag-warning"><div class="s-tag-dot s-tag-dot-warning"></div>Pending</div>
+      <div class="s-tag s-tag-error"><div class="s-tag-dot s-tag-dot-error"></div>Rejected</div>
+    </div>
+    <div class="s-type-meta" style="color:#4A4868;">As content labels</div>
+    <div class="s-tag-row">
+      <div class="s-tag s-tag-success">Design</div>
+      <div class="s-tag s-tag-default">Research</div>
+      <div class="s-tag s-tag-warning">In Review</div>
+      <div class="s-tag" style="background:rgba(127,119,221,0.15);color:#AFA9EC;border-color:rgba(127,119,221,0.3);">New</div>
+    </div>
+  </div>`,
+
+  5: `<div class="s-icon-row">
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><div class="s-icon-name">home</div></div>
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><div class="s-icon-name">user</div></div>
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div class="s-icon-name">settings</div></div>
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="s-icon-name">bell</div></div>
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div><div class="s-icon-name">search</div></div>
+    <div class="s-icon-item"><div class="s-icon-box"><svg viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div class="s-icon-name">heart</div></div>
+  </div>`,
+
+  6: `<div class="s-thumb-row">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+      <div class="s-thumb" style="width:160px;height:90px;">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="s-thumb-label">thumbnail/16-9</div>
+      </div>
+      <div class="s-type-meta">160 × 90px</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+      <div class="s-thumb" style="width:100px;height:75px;">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="s-thumb-label">4-3</div>
+      </div>
+      <div class="s-type-meta">100 × 75px</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+      <div class="s-thumb" style="width:80px;height:80px;">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="s-thumb-label">1-1</div>
+      </div>
+      <div class="s-type-meta">80 × 80px</div>
+    </div>
+  </div>`,
+
+  7: `<div class="s-card">
+    <div class="s-card-img">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    </div>
+    <div class="s-card-body">
+      <div class="s-card-title">Untitled project</div>
+      <div class="s-card-desc">A brief description of this card's content goes here, keeping it to two lines max.</div>
+      <div class="s-btn s-btn-primary" style="margin-top:4px;text-align:center;border-radius:7px;padding:8px 14px;font-size:12px;">Open project</div>
+    </div>
+  </div>`,
+
+  8: `<div class="s-form">
+    <div class="s-form-title">Create account</div>
+    <div class="s-form-sub" style="margin-top:-4px;">Fill in your details to get started</div>
+    <div class="s-field"><div class="s-label">FULL NAME</div><div class="s-input s-input-default">e.g. Jamie Lee</div></div>
+    <div class="s-field"><div class="s-label">EMAIL</div><div class="s-input s-input-focused">jamie@studio.com</div></div>
+    <div class="s-field"><div class="s-label">PASSWORD</div><div class="s-input s-input-default" style="letter-spacing:4px;color:#8B89A8;">••••••••</div></div>
+    <div class="s-btn s-btn-primary" style="text-align:center;border-radius:7px;padding:9px 14px;font-size:12px;margin-top:2px;">Sign up</div>
+    <div style="text-align:center;font-size:10px;color:#4A4868;font-family:var(--mono);">Already have an account? Sign in</div>
+  </div>`,
+
+  9: `<div class="s-list">
+    <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><div class="s-list-text">Dashboard overview</div></div>
+    <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><div class="s-list-text">User management</div></div>
+    <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><div class="s-list-text">Analytics & reports</div></div>
+    <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div class="s-list-text">Settings & preferences</div></div>
+    <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="s-list-text">Help & documentation</div></div>
+  </div>`,
+
+  10: `<div style="display:flex;gap:20px;align-items:flex-start;">
+    <div class="s-complex">
+      <div class="s-complex-img">
+        <svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:#2E2E3E;fill:none;stroke-width:1.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="s-complex-tag">Featured</div>
+      </div>
+      <div class="s-complex-body">
+        <div style="display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#7F77DD;fill:none;stroke-width:1.5;"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg><div class="s-card-title" style="font-size:13px;">Component title</div></div>
+        <div class="s-card-desc" style="font-size:11px;">Description text that can be toggled on or off with a boolean property.</div>
+        <div class="s-list-item" style="padding:6px 0;border:none;"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div><div class="s-list-text" style="font-size:11px;">List item one</div></div>
+        <div class="s-list-item" style="padding:6px 0;border:none;"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div><div class="s-list-text" style="font-size:11px;">List item two</div></div>
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <div class="s-btn s-btn-primary" style="font-size:11px;padding:7px 12px;border-radius:7px;flex:1;text-align:center;">Primary CTA</div>
+          <div class="s-btn s-btn-secondary" style="font-size:11px;padding:7px 12px;border-radius:7px;flex:1;text-align:center;">Secondary</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="s-type-meta" style="margin-bottom:8px;color:#4A4868;">Boolean properties</div>
+      <div class="s-toggles" style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;gap:8px;display:flex;flex-direction:column;">
+        <div class="s-toggle-row"><span class="s-toggle-label">Show thumbnail</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show tag</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show icon</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show description</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show list</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show primary CTA</span><div class="s-toggle on"></div></div>
+        <div class="s-toggle-row"><span class="s-toggle-label">Show secondary CTA</span><div class="s-toggle on"></div></div>
+      </div>
+    </div>
+  </div>`
+};
+
+const chapters = [
+  {
+    id: 0, title: 'Colors', icon: '🎨', time: '20 min', level: 'Beginner', figmaPage: 'Page 1 — Colors',
+    subtitle: 'Build a shared color system that everyone can use',
+    accent: '#EEEDFE',
+    concepts: [
+      { title: 'Local Styles vs Variables', desc: 'Figma lets you save colors as reusable styles. Any change to the style updates every element using it — a huge time-saver across a design system.' },
+      { title: 'Naming conventions', desc: 'Good color names describe purpose, not value. "text/primary" is better than "grey-800". This makes the palette self-documenting for the whole team.' }
+    ],
+    taskTitle: 'Create 4 color styles in Figma',
+    steps: [
+      'Open the shared Figma file and navigate to the <strong>Page 1 — Colors</strong> page',
+      'Draw a rectangle on the canvas, then open the Styles panel (four-dot icon next to Fill)',
+      'Click "+" to save it as a style — name it background/default',
+      'Repeat to create text/primary (dark near-black)',
+      'Add border/default (a medium grey)',
+      'Add primary/action (your brand color — e.g. purple or blue)',
+      'Apply each style to a different shape to verify they work'
+    ],
+    tip: 'Use "/" in style names to create groups — e.g. "text/primary" and "text/secondary" will nest under a "text" folder in the Styles panel.'
+  },
+  {
+    id: 1, title: 'Typography', icon: '🔤', time: '25 min', level: 'Beginner', figmaPage: 'Page 2 — Typography',
+    subtitle: 'Define text styles that create clear visual hierarchy',
+    concepts: [
+      { title: 'Text Styles in Figma', desc: 'Text styles capture font family, size, weight, and line height in one place — giving your team a single source of truth for every piece of text.' },
+      { title: 'Hierarchy: Heading → Title → Body', desc: 'A strong type scale guides the reader\'s eye. Heading draws attention, Title organises sections, Body carries readable content.' }
+    ],
+    taskTitle: 'Create 3 text styles for a full hierarchy',
+    steps: [
+      'Go to <strong>Page 2 — Typography</strong> in the shared Figma file',
+      'Add a text layer and type "Heading" — set to 32px, weight 700, line height 1.2',
+      'Open the text Styles panel, click "+" and name it heading/h1',
+      'Add another text layer "Title" — set to 18px, weight 500, line height 1.4',
+      'Save as text style title/default',
+      'Add a third layer "Body text" — set to 14px, weight 400, line height 1.6',
+      'Save as body/default',
+      'Place all three on one frame and notice the visual hierarchy they create'
+    ],
+    tip: 'Apply your color styles too — use text/primary for headings, text/secondary for body, and your border color for dividers. Styles layer beautifully.'
+  },
+  {
+    id: 2, title: 'Buttons', icon: '🔘', time: '35 min', level: 'Beginner', figmaPage: 'Page 3 — Buttons',
+    subtitle: 'Build your first reusable component with variants',
+    concepts: [
+      { title: 'Components & Instances', desc: 'A component is the master. Instances are linked copies that inherit changes from the master but can be locally overridden for text or swaps.' },
+      { title: 'Variants', desc: 'Variants let you package multiple states (Primary, Secondary, Disabled) inside one component set, switchable from the design properties panel.' }
+    ],
+    taskTitle: 'Create a Button component with 2 variants',
+    steps: [
+      'Go to <strong>Page 3 — Buttons</strong> in the shared Figma file',
+      'Draw a rectangle (120×40px), add a text label "Button" using your title/default text style',
+      'Apply your primary/action color as the fill, body/default as text color',
+      'Select both layers, press Cmd/Ctrl+Alt+K to create a component',
+      'Duplicate the component — restyle it as outlined (transparent fill, colored border)',
+      'Select both components and click "Combine as variants" in the right panel',
+      'Name the property "Type" with values "Primary" and "Secondary"',
+      'Drop an instance on a blank frame and test switching variants in the panel'
+    ],
+    tip: 'Use Auto Layout on your button (Shift+A) so padding scales automatically when text changes length. Set horizontal padding to 16px and vertical to 10px.'
+  },
+  {
+    id: 3, title: 'Inputs & Menus', icon: '📝', time: '40 min', level: 'Intermediate', figmaPage: 'Page 4 — Inputs & Menus',
+    subtitle: 'Design the building blocks of every form',
+    concepts: [
+      { title: 'Input states', desc: 'Every input needs multiple states: Default, Focused, Filled, Error, Disabled. Designing all states upfront prevents implementation gaps.' },
+      { title: 'Dropdown menus', desc: 'A select is an input with a revealed list. Build the trigger and dropdown as separate components for maximum flexibility and reuse.' }
+    ],
+    taskTitle: 'Build a text input (3 states) + a select menu',
+    steps: [
+      'Go to <strong>Page 4 — Inputs & Menus</strong> in the shared Figma file',
+      'Create a frame (320×44px) with horizontal Auto Layout — add 12px horizontal padding',
+      'Add a placeholder text inside using body/default style and text/secondary color',
+      'Add a border using your border/default color style at 1px',
+      'Make this a component, then create 3 variants: Default, Focused (brand color border), Error (red border)',
+      'For the Error state, add a small error message text below in red',
+      'For the select menu: duplicate Default input, add a chevron icon on the right',
+      'Create a dropdown list component separately with 3 menu item instances',
+      'Apply all your styles throughout — no hardcoded colors'
+    ],
+    tip: 'Add a label text above each input as part of the component using vertical Auto Layout — this makes it a complete form field, not just a bare input box.'
+  },
+  {
+    id: 4, title: 'Chips & Tags', icon: '🏷️', time: '25 min', level: 'Intermediate', figmaPage: 'Page 5 — Chips & Tags',
+    subtitle: 'Small components with big reuse potential',
+    concepts: [
+      { title: 'Pill-shaped components', desc: 'Chips and tags are compact labels. Auto Layout makes them hug their text content and maintain consistent padding at any text length.' },
+      { title: 'Color as meaning', desc: 'Tags communicate status — success, warning, error, info. Map tag colors to your color styles for a consistent visual language across the product.' }
+    ],
+    taskTitle: 'Create a Tag component with 4 color variants',
+    steps: [
+      'Go to <strong>Page 5 — Chips & Tags</strong> in the shared Figma file',
+      'Draw a frame, add Auto Layout with 4px vertical and 10px horizontal padding',
+      'Add a text label using body/default style',
+      'Set corner radius to 100px for the pill shape',
+      'Create a component, then make 4 variants by Status: Default (grey), Success (green), Warning (amber), Error (red)',
+      'For each variant, use background fill at ~15% opacity and a matching border',
+      'Optionally add a 6px circle dot before the text as a visual indicator',
+      'Name the property "Status" for easy use in future components'
+    ],
+    tip: 'Name the variant property "Status" — later when building cards you\'ll be able to swap tag status directly from the properties panel without detaching.'
+  },
+  {
+    id: 5, title: 'Icons', icon: '⭐', time: '30 min', level: 'Intermediate', figmaPage: 'Page 6 — Icons',
+    subtitle: 'Import, organise, and wrap icons as components',
+    concepts: [
+      { title: 'SVG icons in Figma', desc: 'Icons imported as SVG become fully editable vectors. Flatten them and set fill to your text/primary style so they respond to color changes.' },
+      { title: 'Icon wrapper component', desc: 'Wrapping each icon in a fixed-size frame (e.g. 24×24) creates a consistent bounding box — alignment becomes predictable in any Auto Layout container.' }
+    ],
+    taskTitle: 'Set up 5 icons as reusable sized components',
+    steps: [
+      'Go to <strong>Page 6 — Icons</strong> in the shared Figma file',
+      'Visit heroicons.com or phosphoricons.com and copy 5 SVG icons you\'ll need',
+      'Paste each into Figma — they arrive as vectors',
+      'Place each inside a 24×24 frame, center the icon inside, enable Clip Content',
+      'Set the icon fill to your text/primary color style',
+      'Create a component for each — name using the pattern icon/arrow-right, icon/close, icon/check etc.',
+      'Combine all 5 into a variant set with a "Name" property',
+      'Add a second property "Size" with values 16, 24, 32 — resize the frame accordingly per size'
+    ],
+    tip: 'Install the Iconify plugin in Figma (free) to search and insert thousands of icons without leaving the app. It\'s a massive time-saver for icon-heavy work.'
+  },
+  {
+    id: 6, title: 'Assets & Thumbnails', icon: '🖼️', time: '25 min', level: 'Intermediate', figmaPage: 'Page 7 — Assets',
+    subtitle: 'Create image placeholders with defined aspect ratios',
+    concepts: [
+      { title: 'Aspect ratio constraints', desc: 'Defining aspect ratios upfront (16:9, 4:3, 1:1) ensures thumbnail slots are always proportionally correct regardless of where they appear.' },
+      { title: 'Clip content & image fills', desc: '"Clip content" on a frame crops images to the frame boundary — essential for thumbnail slots. Combine with image fill for realistic mockups.' }
+    ],
+    taskTitle: 'Create thumbnail components in 3 aspect ratios',
+    steps: [
+      'Go to <strong>Page 7 — Assets</strong> in the shared Figma file',
+      'Draw a frame at 320×180px (16:9 ratio) — enable Clip Content in the Design panel',
+      'Fill it with your border/default color as a placeholder background',
+      'Add a small image icon from your icon set, centered inside the frame',
+      'Create a component — name it thumbnail/16-9',
+      'Duplicate and resize to 320×240px (4:3) — rename to thumbnail/4-3',
+      'Duplicate again to 240×240px (1:1) — rename to thumbnail/1-1',
+      'Combine all three into a variant set with a "Ratio" property'
+    ],
+    tip: 'Hold Shift while resizing in Figma to lock the aspect ratio. Or click the chain link icon (🔒) between W and H in the properties panel to constrain proportions.'
+  },
+  {
+    id: 7, title: 'Card Component', icon: '🃏', time: '45 min', level: 'Intermediate', figmaPage: 'Page 8 — Card Component',
+    subtitle: 'Compose your first multi-part component from primitives',
+    concepts: [
+      { title: 'Composing components', desc: 'Place instances of your button, thumbnail, and text styles inside a new component. Changes to any child cascade up — the system works as one.' },
+      { title: 'Auto Layout for cards', desc: 'A card with vertical Auto Layout stacks children predictably. Set padding to 16px, gap to 12px, and the card will breathe beautifully at any content length.' }
+    ],
+    taskTitle: 'Build a card: Thumbnail + Title + Description + Button',
+    steps: [
+      'Go to <strong>Page 8 — Card Component</strong> in the shared Figma file',
+      'Create a new frame (320px wide) with vertical Auto Layout, 16px padding, 12px gap',
+      'Set corner radius to 12px and add a 1px border using your border/default style',
+      'Drop in your thumbnail/16-9 instance at the top',
+      'Add a text layer using heading/h1 style for the card title',
+      'Add a second text layer using body/default for the description (set to 2 lines max)',
+      'Drop in your Button / Primary instance and set its width to "Fill container"',
+      'Select the whole frame and create a component — name it card/default',
+      'Test: change the button variant on an instance — it should switch without breaking layout'
+    ],
+    tip: 'Set the description text layer to "Fill container" horizontally and cap it at 2 lines with a "…" truncation using Figma\'s text truncation setting in the design panel.'
+  },
+  {
+    id: 8, title: 'Form Component', icon: '📋', time: '50 min', level: 'Intermediate', figmaPage: 'Page 9 — Form Component',
+    subtitle: 'Combine inputs into a complete, reusable form',
+    concepts: [
+      { title: 'Nesting component instances', desc: 'A form is a collection of input instances. Nesting means you can swap a single input to the Error state without affecting the rest of the form.' },
+      { title: 'CTA placement', desc: 'CTA buttons in forms span the full width and appear after all inputs — signaling "this action completes the form" without ambiguity.' }
+    ],
+    taskTitle: 'Build a sign-up form with 3 inputs and a CTA button',
+    steps: [
+      'Go to <strong>Page 9 — Form Component</strong> in the shared Figma file',
+      'Create a frame (400px wide) with vertical Auto Layout, 24px padding, 16px gap',
+      'Add a heading "Create account" using heading/h1 style',
+      'Add a short subtitle in body/default style: "Fill in your details to get started"',
+      'Drop 3 instances of your text input component for Name, Email, Password',
+      'Change the Password input label and add a show/hide icon on the right edge',
+      'Drop in a full-width Primary Button — label it "Sign up"',
+      'Add a small centred body text below: "Already have an account? Sign in"',
+      'Create component named form/sign-up'
+    ],
+    tip: 'Test error states: switch one input instance to "Error" variant from the panel — the form layout should flex naturally without you touching anything else. If it breaks, check Auto Layout spacing.'
+  },
+  {
+    id: 9, title: 'List Component', icon: '📄', time: '40 min', level: 'Intermediate', figmaPage: 'Page 10 — List Component',
+    subtitle: 'Build a scalable list with icon-adorned items',
+    concepts: [
+      { title: 'List item as a component', desc: 'Always make the list item its own component first, then stack instances inside the list container. This way you can change all items at once.' },
+      { title: 'Horizontal Auto Layout', desc: 'A list item uses horizontal Auto Layout: icon on the left (fixed), text on the right (fill). This makes the text expand to all remaining available width.' }
+    ],
+    taskTitle: 'Build a list with icon list items and dividers',
+    steps: [
+      'Go to <strong>Page 10 — List Component</strong> in the shared Figma file',
+      'Create a frame with horizontal Auto Layout — 8px gap, 12px vertical / 16px horizontal padding',
+      'Drop an icon instance on the left (set to Hug size)',
+      'Add a text layer on the right using body/default — set to "Fill container" width',
+      'Create a component named list-item/default',
+      'Create a parent frame with vertical Auto Layout, 0px gap',
+      'Stack 5 list-item instances inside',
+      'Between each item, add a 1px separator line using your border/default color style',
+      'Create the parent as a component named list/default'
+    ],
+    tip: 'To swap icons within each list item instance: select the instance, find the icon property in the panel, and use the component switcher. No need to detach.'
+  },
+  {
+    id: 10, title: 'Complex Component', icon: '🧩', time: '90 min', level: 'Advanced', figmaPage: 'Page 11 — Complex Component',
+    subtitle: 'Master show/hide properties and full component flexibility',
+    concepts: [
+      { title: 'Boolean properties (show/hide)', desc: 'Figma\'s boolean component properties let you toggle layers on and off from the properties panel without detaching or duplicating — this is the key to flexible, production-ready components.' },
+      { title: 'Nested variant composition', desc: 'A complex component nests thumbnail, tag, CTAs, icons, and list — each with their own variants — all surfaced and controlled from one unified properties panel.' }
+    ],
+    taskTitle: 'Build the full flexible content card with 8 toggleable sections',
+    steps: [
+      'Go to <strong>Page 11 — Complex Component</strong> in the shared Figma file',
+      'Create a master frame (360px wide) with vertical Auto Layout, 0px padding',
+      'Add thumbnail/16-9 at top — right-click → Add boolean property "Show thumbnail"',
+      'Overlay a tag instance on the thumbnail corner — add boolean "Show tag"',
+      'Below the thumbnail, add your icon component — add boolean "Show icon"',
+      'Add title text (always visible — heading/h1 style)',
+      'Add description text below title — add boolean "Show description"',
+      'Add list/default instance — add boolean "Show list"',
+      'Add Primary Button instance — add boolean "Show primary CTA"',
+      'Add Secondary Button instance — add boolean "Show secondary CTA"',
+      'Drop an instance on a new frame and systematically toggle each boolean — verify layout reflows cleanly with no gaps or overlaps'
+    ],
+    tip: '🎉 Milestone: You now have a production-ready design system. Every element links back to your color and text styles from Chapter 1. Change a single style and watch it cascade across all 11 chapters of work.'
+  }
+];
+
+// === STATE ===
+let state = { current: -1, completed: [], stepsDone: {} };
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function resetProgress() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  state = { current: -1, completed: [], stepsDone: {} };
+  saveState();
+  location.reload();
+}
+
+// === RENDER ===
+function renderSidebar() {
+  const list = document.getElementById('chapter-list');
+  list.innerHTML = chapters.map(ch => {
+    const done = state.completed.includes(ch.id);
+    const active = state.current === ch.id;
+    return `<button class="ch-btn ${active ? 'active' : ''} ${done ? 'done' : ''}" onclick="goTo(${ch.id})">
+      <div class="ch-num">${done ? '✓' : ch.id + 1}</div>
+      <div class="ch-name">${ch.title}</div>
+      <div class="ch-time">${ch.time}</div>
+    </button>`;
+  }).join('');
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = Math.round((state.completed.length / chapters.length) * 100);
+  document.getElementById('overall-bar').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct + '%';
+}
+
+function renderChapter(id) {
+  const ch = chapters[id];
+  const doneSteps = state.stepsDone[id] || [];
+  const levelClass = { Beginner: 'beginner', Intermediate: 'intermediate', Advanced: 'advanced' }[ch.level];
+
+  document.getElementById('tb-chapter').textContent = `Chapter ${id + 1} of ${chapters.length}`;
+  document.getElementById('tb-title').textContent = ch.title;
+  document.getElementById('tb-meta').innerHTML = `
+    <span class="badge badge-time">⏱ ${ch.time}</span>
+    <span class="badge badge-level-${levelClass}">${ch.level}</span>
+  `;
+  document.getElementById('nav-pos').textContent = `${id + 1} / ${chapters.length}`;
+  document.getElementById('prev-btn').disabled = id === 0;
+  document.getElementById('next-btn').disabled = id === chapters.length - 1;
+  document.getElementById('next-btn').textContent = id === chapters.length - 1 ? 'Last chapter' : 'Next →';
+
+  const completedChapter = state.completed.includes(id);
+  const stepsHTML = ch.steps.map((step, i) => {
+    const checked = doneSteps.includes(i);
+    return `<li class="task-step">
+      <div class="step-check ${checked ? 'checked' : ''}" onclick="toggleStep(${id}, ${i})"></div>
+      <span class="step-text ${checked ? 'checked' : ''}">${step}</span>
+    </li>`;
+  }).join('');
+
+  const allDone = ch.steps.length > 0 && doneSteps.length >= ch.steps.length;
+
+  const sampleHTML = samples[id] ? `
+    <div class="section">
+      <div class="section-label">Sample preview</div>
+      <div class="sample-card">
+        <div class="sample-inner">${samples[id]}</div>
+      </div>
+    </div>` : '';
+
+  return `
+    <div class="figma-banner">
+      <div class="figma-banner-icon"><svg viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" fill="#1ABCFE"/><path d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 0 1-19 0z" fill="#0ACF83"/><path d="M19 0v19h9.5a9.5 9.5 0 0 0 0-19H19z" fill="#FF7262"/><path d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" fill="#F24E1E"/><path d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" fill="#A259FF"/></svg></div>
+      <div class="figma-banner-text">Work directly in the shared Figma file — <strong>${ch.figmaPage}</strong></div>
+      <div class="figma-banner-page">${ch.figmaPage.split(' — ')[0]}</div>
+    </div>
+    <div class="section">
+      <div class="section-label">What you'll learn</div>
+      ${ch.concepts.map(c => `<div class="concept-card"><div class="concept-title">${c.title}</div><div class="concept-desc">${c.desc}</div></div>`).join('')}
+    </div>
+    ${sampleHTML}
+    <div class="section">
+      <div class="section-label">Hands-on task</div>
+      <div class="task-card">
+        <div class="task-header"><div class="task-icon">✏️</div><div class="task-label-text">Task</div></div>
+        <div class="task-title">${ch.taskTitle}</div>
+        <ul class="task-steps">${stepsHTML}</ul>
+      </div>
+    </div>
+    <div class="section">
+      <div class="tip-card"><div class="tip-label">Pro tip</div><div class="tip-text">${ch.tip}</div></div>
+    </div>
+    <div class="complete-row">
+      <button class="complete-btn ${completedChapter ? 'completed' : ''}" onclick="markComplete(${id})">
+        ${completedChapter ? '✓ Chapter complete' : '✓ Mark chapter complete'}
+      </button>
+      ${!completedChapter ? `<span class="complete-hint">${allDone ? 'All steps checked — ready to mark complete!' : `${doneSteps.length}/${ch.steps.length} steps checked`}</span>` : ''}
+    </div>
+  `;
+}
+
+function renderWelcome() {
+  const resumeChapter = state.completed.length > 0 ? Math.max(...state.completed) + 1 : 0;
+  const nextChapter = chapters[Math.min(resumeChapter, chapters.length - 1)];
+  const pct = Math.round((state.completed.length / chapters.length) * 100);
+  return `
+    <div class="welcome">
+      <div class="welcome-emoji">✦</div>
+      <div class="welcome-title">${state.completed.length > 0 ? 'Welcome back' : 'Welcome to Figma Induction'}</div>
+      <div class="welcome-sub">
+        ${state.completed.length > 0
+          ? `You've completed ${state.completed.length} of ${chapters.length} chapters. Keep going — you're ${pct}% through the programme.`
+          : 'A step-by-step programme to take you from Figma basics to a complete, production-ready design system. Each chapter maps to a page in your shared Figma file.'}
+      </div>
+      <div class="welcome-stats">
+        <div class="stat"><div class="stat-num">11</div><div class="stat-label">chapters</div></div>
+        <div class="stat"><div class="stat-num">~8h</div><div class="stat-label">total time</div></div>
+        <div class="stat"><div class="stat-num">${state.completed.length}</div><div class="stat-label">completed</div></div>
+      </div>
+      <button class="start-btn" onclick="goTo(${Math.min(resumeChapter, chapters.length - 1)})">
+        ${state.completed.length > 0 ? `Continue: ${nextChapter.title} →` : 'Start with Colors →'}
+      </button>
+    </div>
+  `;
+}
+
+function goTo(id) {
+  state.current = id;
+  saveState();
+  document.getElementById('content-area').innerHTML = renderChapter(id);
+  document.getElementById('content-area').scrollTop = 0;
+  renderSidebar();
+}
+
+function navigate(dir) {
+  const next = state.current + dir;
+  if (next >= 0 && next < chapters.length) goTo(next);
+}
+
+function toggleStep(chapterId, stepIdx) {
+  if (!state.stepsDone[chapterId]) state.stepsDone[chapterId] = [];
+  const arr = state.stepsDone[chapterId];
+  const idx = arr.indexOf(stepIdx);
+  if (idx === -1) arr.push(stepIdx); else arr.splice(idx, 1);
+  saveState();
+  goTo(chapterId);
+}
+
+function markComplete(id) {
+  if (!state.completed.includes(id)) state.completed.push(id);
+  saveState();
+  if (id < chapters.length - 1) {
+    goTo(id + 1);
+  } else {
+    goTo(id);
+    setTimeout(() => {
+      document.getElementById('content-area').scrollTop = 9999;
+    }, 100);
+  }
+}
+
+// === INIT ===
+loadState();
+renderSidebar();
+
+if (state.current === -1) {
+  document.getElementById('content-area').innerHTML = renderWelcome();
+  document.getElementById('tb-chapter').textContent = 'Programme';
+  document.getElementById('tb-title').textContent = 'Figma Design Induction';
+  document.getElementById('tb-meta').innerHTML = '';
+  document.getElementById('nav-pos').textContent = '— / 11';
+  document.getElementById('prev-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+} else {
+  goTo(state.current);
+}
+</script>
+</body>
+</html>
