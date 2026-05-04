@@ -47,6 +47,34 @@
 
   html, body { height: 100%; background: var(--bg); color: var(--text-primary); font-family: var(--font); font-size: 15px; line-height: 1.6; overflow: hidden; }
 
+  /* === LOGIN SCREEN === */
+  .login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  .login-screen.hidden { display: none; }
+  .login-card { width: 380px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+  .login-logo-mark { width: 36px; height: 36px; background: var(--purple-400); border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+  .login-logo-mark svg { width: 20px; height: 20px; fill: white; }
+  .login-logo-text { font-size: 15px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.02em; }
+  .login-logo-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .login-title { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 6px; }
+  .login-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+  .login-field { margin-bottom: 16px; }
+  .login-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+  .login-input { width: 100%; padding: 11px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-primary); font-family: var(--font); font-size: 14px; outline: none; transition: border-color 0.15s; }
+  .login-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(127,119,221,0.12); }
+  .login-input::placeholder { color: var(--text-muted); }
+  .login-btn { width: 100%; padding: 12px; background: var(--purple-400); color: white; border: none; border-radius: var(--radius); font-family: var(--font); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+  .login-btn:hover { background: var(--purple-600); transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+  .login-error { font-size: 12px; color: #E24B4A; margin-top: 10px; min-height: 18px; text-align: center; }
+
+  /* === USER BADGE IN TOPBAR === */
+  .user-badge { display: flex; align-items: center; gap: 8px; }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(127,119,221,0.2); border: 1px solid rgba(127,119,221,0.3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--accent-light); }
+  .user-name { font-size: 12px; color: var(--text-secondary); }
+  .logout-btn { padding: 5px 10px; border: 1px solid var(--border); background: none; color: var(--text-muted); font-family: var(--font); font-size: 11px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .logout-btn:hover { border-color: rgba(255,100,100,0.3); color: #FF6B6B; background: rgba(255,100,100,0.05); }
+
   /* === LAYOUT === */
   .app { display: flex; height: 100vh; }
   .sidebar { width: 260px; flex-shrink: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
@@ -268,7 +296,33 @@
 </head>
 <body>
 
-<div class="app">
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5.5A3.5 3.5 0 018.5 2H12v7H8.5A3.5 3.5 0 015 5.5zM12 2h3.5a3.5 3.5 0 110 7H12V2zM12 12.5v-3.5h3.5a3.5 3.5 0 110 7H12v-3.5zM5 12.5A3.5 3.5 0 018.5 9H12v7H8.5A3.5 3.5 0 015 12.5zM8.5 16H12v3.5a3.5 3.5 0 11-3.5-3.5z"/></svg>
+      </div>
+      <div>
+        <div class="login-logo-text">Figma Induction</div>
+        <div class="login-logo-sub">Design System Training</div>
+      </div>
+    </div>
+    <div class="login-title">Sign in</div>
+    <div class="login-sub">Enter your credentials to access the programme</div>
+    <div class="login-field">
+      <div class="login-label">Username</div>
+      <input class="login-input" id="login-username" type="text" placeholder="your username" autocomplete="username" />
+    </div>
+    <div class="login-field">
+      <div class="login-label">Password</div>
+      <input class="login-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="login-btn" onclick="attemptLogin()">Sign in →</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none;">
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-top">
@@ -303,7 +357,14 @@
         <div class="topbar-chapter" id="tb-chapter">Welcome</div>
         <div class="topbar-title" id="tb-title">Figma Design Induction</div>
       </div>
-      <div class="topbar-meta" id="tb-meta"></div>
+      <div class="topbar-meta" id="tb-meta" style="display:flex;align-items:center;gap:12px;">
+        <span id="tb-badges" style="display:flex;gap:8px;align-items:center;"></span>
+        <div class="user-badge" id="user-badge" style="display:none;">
+          <div class="user-avatar" id="user-avatar"></div>
+          <span class="user-name" id="user-name-label"></span>
+          <button class="logout-btn" onclick="logout()">Sign out</button>
+        </div>
+      </div>
     </div>
 
     <div class="content" id="content-area">
@@ -312,7 +373,7 @@
 
     <div class="bottom-nav">
       <button class="nav-btn" id="prev-btn" onclick="navigate(-1)" disabled>← Previous</button>
-      <span class="nav-pos" id="nav-pos">— / 11</span>
+      <span class="nav-pos" id="nav-pos">— / 12</span>
       <button class="nav-btn next" id="next-btn" onclick="navigate(1)">Next →</button>
     </div>
   </div>
@@ -320,6 +381,82 @@
 
 <script>
 const STORAGE_KEY = 'figma-induction-v2';
+
+// === AUTH ===
+const USERS = {
+  adithyan: { password: 'Adithyan@4monks', displayName: 'Adithyan' },
+  tom:      { password: 'tom@4monks',      displayName: 'Tom' }
+};
+const SESSION_KEY = 'figma-induction-session';
+
+let currentUser = null;
+
+function getStorageKey(username) {
+  return STORAGE_KEY + '-' + username;
+}
+
+function attemptLogin() {
+  const username = document.getElementById('login-username').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const errorEl = document.getElementById('login-error');
+
+  if (!USERS[username] || USERS[username].password !== password) {
+    errorEl.textContent = 'Incorrect username or password. Please try again.';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-password').focus();
+    return;
+  }
+
+  errorEl.textContent = '';
+  currentUser = username;
+  sessionStorage.setItem(SESSION_KEY, username);
+  bootApp();
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  currentUser = null;
+  state = { current: -1, completed: [], stepsDone: {} };
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('app').style.display = 'none';
+}
+
+// Allow Enter key to submit login
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !document.getElementById('login-screen').classList.contains('hidden')) {
+    attemptLogin();
+  }
+});
+
+function bootApp() {
+  const user = USERS[currentUser];
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').style.display = 'flex';
+
+  // Show user badge
+  const initials = user.displayName.substring(0, 2).toUpperCase();
+  document.getElementById('user-avatar').textContent = initials;
+  document.getElementById('user-name-label').textContent = user.displayName;
+  document.getElementById('user-badge').style.display = 'flex';
+
+  // Load this user's progress
+  loadState();
+  renderSidebar();
+
+  if (state.current === -1) {
+    document.getElementById('content-area').innerHTML = renderWelcome();
+    document.getElementById('tb-chapter').textContent = 'Programme';
+    document.getElementById('tb-title').textContent = 'Figma Design Induction';
+    document.getElementById('nav-pos').textContent = '— / 12';
+    document.getElementById('prev-btn').disabled = true;
+    document.getElementById('next-btn').disabled = true;
+  } else {
+    goTo(state.current);
+  }
+}
 
 const samples = {
   0: `<div class="s-color-row">
@@ -777,17 +914,19 @@ let state = { current: -1, completed: [], stepsDone: {} };
 
 function loadState() {
   try {
-    const s = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey(currentUser);
+    const s = localStorage.getItem(key);
     if (s) state = JSON.parse(s);
-  } catch(e) {}
+    else state = { current: -1, completed: [], stepsDone: {} };
+  } catch(e) { state = { current: -1, completed: [], stepsDone: {} }; }
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(getStorageKey(currentUser), JSON.stringify(state));
 }
 
 function resetProgress() {
-  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  if (!confirm('Reset all your progress? This cannot be undone.')) return;
   state = { current: -1, completed: [], stepsDone: {} };
   saveState();
   location.reload();
@@ -821,7 +960,7 @@ function renderChapter(id) {
 
   document.getElementById('tb-chapter').textContent = `Chapter ${id + 1} of ${chapters.length}`;
   document.getElementById('tb-title').textContent = ch.title;
-  document.getElementById('tb-meta').innerHTML = `
+  document.getElementById('tb-badges').innerHTML = `
     <span class="badge badge-time">⏱ ${ch.time}</span>
     <span class="badge badge-level-${levelClass}">${ch.level}</span>
   `;
@@ -941,19 +1080,14 @@ function markComplete(id) {
 }
 
 // === INIT ===
-loadState();
-renderSidebar();
-
-if (state.current === -1) {
-  document.getElementById('content-area').innerHTML = renderWelcome();
-  document.getElementById('tb-chapter').textContent = 'Programme';
-  document.getElementById('tb-title').textContent = 'Figma Design Induction';
-  document.getElementById('tb-meta').innerHTML = '';
-  document.getElementById('nav-pos').textContent = '— / 12';
-  document.getElementById('prev-btn').disabled = true;
-  document.getElementById('next-btn').disabled = true;
+// Check for existing session
+const savedSession = sessionStorage.getItem(SESSION_KEY);
+if (savedSession && USERS[savedSession]) {
+  currentUser = savedSession;
+  bootApp();
 } else {
-  goTo(state.current);
+  // Show login, focus username field
+  document.getElementById('login-username').focus();
 }
 </script>
 </body>
