@@ -319,7 +319,7 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'figma-induction-v1';
+const STORAGE_KEY = 'figma-induction-v2';
 
 const samples = {
   0: `<div class="s-color-row">
@@ -442,7 +442,43 @@ const samples = {
     <div class="s-list-item"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="s-list-text">Help & documentation</div></div>
   </div>`,
 
-  10: `<div style="display:flex;gap:20px;align-items:flex-start;">
+  10: `<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+    <div>
+      <div class="s-type-meta" style="margin-bottom:8px;">Primitives collection</div>
+      <div style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;width:190px;">
+        <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:10px;font-weight:500;color:#7F77DD;font-family:var(--mono);letter-spacing:0.06em;">PRIMITIVES</div>
+        <div style="padding:4px 0;">
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:12px;height:12px;border-radius:3px;background:#F8F7FF;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">white</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:12px;height:12px;border-radius:3px;background:#AFA9EC;flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">purple/400</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:12px;height:12px;border-radius:3px;background:#534AB7;flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">purple/600</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:12px;height:12px;border-radius:3px;background:#D4D2E8;flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">grey/200</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:12px;height:12px;border-radius:3px;background:#1A1928;flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">grey/900</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;"><div style="width:10px;height:10px;border-radius:2px;background:rgba(127,119,221,0.3);flex-shrink:0;"></div><span style="font-size:11px;color:#8B89A8;font-family:var(--mono);">size/14 · 18 · 32</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="color:#4A4868;font-size:18px;align-self:center;padding-top:20px;">→</div>
+    <div>
+      <div class="s-type-meta" style="margin-bottom:8px;">Semantic tokens</div>
+      <div style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;width:220px;">
+        <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:10px;font-weight:500;color:#1D9E75;font-family:var(--mono);letter-spacing:0.06em;">COLOR TOKENS</div>
+        <div style="padding:4px 0;">
+          <div style="padding:5px 12px;"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/background/default</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/white</div></div>
+          <div style="padding:5px 12px;border-top:1px solid rgba(255,255,255,0.04);"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/text/primary</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/grey-900</div></div>
+          <div style="padding:5px 12px;border-top:1px solid rgba(255,255,255,0.04);"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/border/default</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/grey-200</div></div>
+          <div style="padding:5px 12px;border-top:1px solid rgba(255,255,255,0.04);"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/brand/primary</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/purple-400</div></div>
+        </div>
+        <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);font-size:10px;font-weight:500;color:#1D9E75;font-family:var(--mono);letter-spacing:0.06em;">TYPE SCALE</div>
+        <div style="padding:4px 0;">
+          <div style="padding:5px 12px;"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">typescale/heading</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/size-32</div></div>
+          <div style="padding:5px 12px;border-top:1px solid rgba(255,255,255,0.04);"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">typescale/title</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/size-18</div></div>
+          <div style="padding:5px 12px;border-top:1px solid rgba(255,255,255,0.04);"><span style="font-size:10px;color:#7F77DD;font-family:var(--mono);">typescale/body</span><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">→ primitive/size-14</div></div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  11: `<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
     <div class="s-complex">
       <div class="s-complex-img">
         <svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:#2E2E3E;fill:none;stroke-width:1.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -450,7 +486,7 @@ const samples = {
       </div>
       <div class="s-complex-body">
         <div style="display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#7F77DD;fill:none;stroke-width:1.5;"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg><div class="s-card-title" style="font-size:13px;">Component title</div></div>
-        <div class="s-card-desc" style="font-size:11px;">Description text that can be toggled on or off with a boolean property.</div>
+        <div class="s-card-desc" style="font-size:11px;">Powered by color/background and typescale tokens — change one primitive, everything updates.</div>
         <div class="s-list-item" style="padding:6px 0;border:none;"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div><div class="s-list-text" style="font-size:11px;">List item one</div></div>
         <div class="s-list-item" style="padding:6px 0;border:none;"><div class="s-list-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div><div class="s-list-text" style="font-size:11px;">List item two</div></div>
         <div style="display:flex;gap:6px;margin-top:4px;">
@@ -460,8 +496,16 @@ const samples = {
       </div>
     </div>
     <div>
-      <div class="s-type-meta" style="margin-bottom:8px;color:#4A4868;">Boolean properties</div>
-      <div class="s-toggles" style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;gap:8px;display:flex;flex-direction:column;">
+      <div class="s-type-meta" style="margin-bottom:8px;">Variable bindings</div>
+      <div style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;width:180px;">
+        <div><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">card bg fill</div><div style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/background/default</div></div>
+        <div><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">title font size</div><div style="font-size:10px;color:#7F77DD;font-family:var(--mono);">typescale/heading</div></div>
+        <div><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">body font size</div><div style="font-size:10px;color:#7F77DD;font-family:var(--mono);">typescale/body</div></div>
+        <div><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">primary btn fill</div><div style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/brand/primary</div></div>
+        <div><div style="font-size:9px;color:#4A4868;font-family:var(--mono);">border color</div><div style="font-size:10px;color:#7F77DD;font-family:var(--mono);">color/border/default</div></div>
+      </div>
+      <div class="s-type-meta" style="margin-top:12px;margin-bottom:8px;">Boolean toggles</div>
+      <div style="background:#0E0E12;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
         <div class="s-toggle-row"><span class="s-toggle-label">Show thumbnail</span><div class="s-toggle on"></div></div>
         <div class="s-toggle-row"><span class="s-toggle-label">Show tag</span><div class="s-toggle on"></div></div>
         <div class="s-toggle-row"><span class="s-toggle-label">Show icon</span><div class="s-toggle on"></div></div>
@@ -680,27 +724,51 @@ const chapters = [
     tip: 'To swap icons within each list item instance: select the instance, find the icon property in the panel, and use the component switcher. No need to detach.'
   },
   {
-    id: 10, title: 'Complex Component', icon: '🧩', time: '90 min', level: 'Advanced', figmaPage: 'Page 11 — Complex Component',
-    subtitle: 'Master show/hide properties and full component flexibility',
+    id: 10, title: 'Variables', icon: '⚙️', time: '60 min', level: 'Advanced', figmaPage: 'Page 11 — Variables',
+    subtitle: 'Build a token system with primitives and semantic variables',
+    concepts: [
+      { title: 'Primitives vs semantic tokens', desc: 'Primitives are raw values — purple-400, size-16. Semantic tokens give them meaning — color/brand/primary, text/heading/size. Primitives define what exists; semantics define what it means.' },
+      { title: 'Figma Variables vs Styles', desc: 'Variables (introduced in 2023) are more powerful than styles — they support modes (light/dark), can be scoped by type, and bind directly to component properties. They\'re the foundation of a truly scalable system.' }
+    ],
+    taskTitle: 'Build color and typography token layers',
+    steps: [
+      'Go to <strong>Page 11 — Variables</strong> in the shared Figma file',
+      'Open the Variables panel: right-click the canvas → Edit Variables (or via the Local Variables button in the right panel)',
+      'Create a new collection named <strong>Primitives</strong>',
+      'Add color primitives — e.g. purple/100 through purple/900, grey/100 through grey/900 — using your raw hex values',
+      'Add number primitives for type sizes: size/12, size/14, size/16, size/18, size/24, size/32',
+      'Create a second collection named <strong>Color Tokens</strong>',
+      'Add semantic color variables that reference your primitives: color/background/default → primitive/white, color/text/primary → primitive/grey-900, color/border/default → primitive/grey-200, color/brand/primary → primitive/purple-400',
+      'Create a third collection named <strong>Type Scale</strong>',
+      'Add semantic type variables: typescale/heading → primitive/size-32, typescale/title → primitive/size-18, typescale/body → primitive/size-14',
+      'Apply your Color Token variables to a few existing components — notice that changing a primitive now cascades through semantic tokens to every component at once'
+    ],
+    tip: 'Add a "Mode" to your Color Tokens collection — create a Light and Dark mode. Map dark mode values to darker primitives. Then you can switch the entire file between light and dark with one click from the design panel.'
+  },
+  {
+    id: 11, title: 'Complex Component', icon: '🧩', time: '90 min', level: 'Advanced', figmaPage: 'Page 12 — Complex Component',
+    subtitle: 'Build a fully flexible component powered by your variable system',
     concepts: [
       { title: 'Boolean properties (show/hide)', desc: 'Figma\'s boolean component properties let you toggle layers on and off from the properties panel without detaching or duplicating — this is the key to flexible, production-ready components.' },
-      { title: 'Nested variant composition', desc: 'A complex component nests thumbnail, tag, CTAs, icons, and list — each with their own variants — all surfaced and controlled from one unified properties panel.' }
+      { title: 'Variables-powered components', desc: 'By binding component fills and text sizes to your semantic tokens instead of raw values, every color and spacing decision in this component becomes centrally controlled — change one token and the whole component updates.' }
     ],
-    taskTitle: 'Build the full flexible content card with 8 toggleable sections',
+    taskTitle: 'Build the full flexible content card using variables throughout',
     steps: [
-      'Go to <strong>Page 11 — Complex Component</strong> in the shared Figma file',
+      'Go to <strong>Page 12 — Complex Component</strong> in the shared Figma file',
       'Create a master frame (360px wide) with vertical Auto Layout, 0px padding',
       'Add thumbnail/16-9 at top — right-click → Add boolean property "Show thumbnail"',
       'Overlay a tag instance on the thumbnail corner — add boolean "Show tag"',
       'Below the thumbnail, add your icon component — add boolean "Show icon"',
-      'Add title text (always visible — heading/h1 style)',
-      'Add description text below title — add boolean "Show description"',
+      'Add title text — bind its font size to your <strong>typescale/heading</strong> variable (not a hardcoded value)',
+      'Add description text — bind font size to <strong>typescale/body</strong> variable — add boolean "Show description"',
       'Add list/default instance — add boolean "Show list"',
-      'Add Primary Button instance — add boolean "Show primary CTA"',
-      'Add Secondary Button instance — add boolean "Show secondary CTA"',
-      'Drop an instance on a new frame and systematically toggle each boolean — verify layout reflows cleanly with no gaps or overlaps'
+      'Add Primary Button — bind its fill to <strong>color/brand/primary</strong> variable — add boolean "Show primary CTA"',
+      'Add Secondary Button — bind border color to <strong>color/brand/primary</strong> variable — add boolean "Show secondary CTA"',
+      'Bind the card background fill to <strong>color/background/default</strong> variable',
+      'Drop an instance and toggle each boolean — verify layout reflows with no gaps or overlaps',
+      'Finally: change a primitive value in your Variables panel and watch it cascade through tokens into the component'
     ],
-    tip: '🎉 Milestone: You now have a production-ready design system. Every element links back to your color and text styles from Chapter 1. Change a single style and watch it cascade across all 11 chapters of work.'
+    tip: '🎉 Milestone: You now have a production-ready, token-powered design system. Every color, size, and spacing decision traces back to a single primitive. This is how real design systems at scale are built.'
   }
 ];
 
@@ -826,8 +894,8 @@ function renderWelcome() {
           : 'A step-by-step programme to take you from Figma basics to a complete, production-ready design system. Each chapter maps to a page in your shared Figma file.'}
       </div>
       <div class="welcome-stats">
-        <div class="stat"><div class="stat-num">11</div><div class="stat-label">chapters</div></div>
-        <div class="stat"><div class="stat-num">~8h</div><div class="stat-label">total time</div></div>
+        <div class="stat"><div class="stat-num">12</div><div class="stat-label">chapters</div></div>
+        <div class="stat"><div class="stat-num">~9h</div><div class="stat-label">total time</div></div>
         <div class="stat"><div class="stat-num">${state.completed.length}</div><div class="stat-label">completed</div></div>
       </div>
       <button class="start-btn" onclick="goTo(${Math.min(resumeChapter, chapters.length - 1)})">
@@ -881,7 +949,7 @@ if (state.current === -1) {
   document.getElementById('tb-chapter').textContent = 'Programme';
   document.getElementById('tb-title').textContent = 'Figma Design Induction';
   document.getElementById('tb-meta').innerHTML = '';
-  document.getElementById('nav-pos').textContent = '— / 11';
+  document.getElementById('nav-pos').textContent = '— / 12';
   document.getElementById('prev-btn').disabled = true;
   document.getElementById('next-btn').disabled = true;
 } else {
